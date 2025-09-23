@@ -1,85 +1,53 @@
-"""
-sso lista tudo que a impressora expõe.
-
-No Python: coletar oid (1.3.6.1.2.1)
-
-from pysnmp.hlapi import *
+from snmpCnn import snmp_get
+import asyncio
 
 
-printer_ip = "172.36.15.2"
-printer_port = 161 # or 160/162
-printer_oid = "1.3.6.1.2.1"
-
-
-
-for (errorIndication, errorStatus, errorIndex, varBinds) in nextCmd(
-    SnmpEngine(),
-    CommunityData("public", mpModel=0),
-    UdpTransportTarget((printer_ip, printer_port)),
-    ContextData(),
-    ObjectType(ObjectIdentity(printer_oid)),
-    lexicographicMode=False
-):
-    if errorIndication:
-        print(errorIndication)
-        break
-    elif errorStatus:
-        print(errorStatus.prettyPrint())
-        break
-    else:
-        for varBind in varBinds:
-            print(varBind)
- """
- 
- 
-from pysnmp.hlapi import *
-
-def get_printer_info(host, community, oid):
-    """
-    Busca uma informação específica (OID) de um dispositivo via SNMP.
-    """
-    errorIndication, errorStatus, errorIndex, varBinds = next(
-        getCmd(SnmpEngine(),
-               CommunityData(community, mpModel=0),
-               UdpTransportTarget((host, 161)),
-               ContextData(),
-               ObjectType(ObjectIdentity(oid)))
-    )
-
-    if errorIndication:
-        print(errorIndication)
-        return None
-    elif errorStatus:
-        print(f'{errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"}')
-        return None
-    else:
-        for varBind in varBinds:
-            # Retorna o valor como uma string
-            return str(varBind[1])
-
-# --- INFORMAÇÕES DA SUA IMPRESSORA ---
 PRINTER_IP = '172.36.15.2' # Substitua pelo IP da sua impressora
 COMMUNITY_STRING = 'public'   # Use a community string configurada na impressora
+OID = "1.3.6.1.4.1.11.2.3.9.4.2.1.4.1.2.5.0"
 
-# --- OIDs COMUNS PARA IMPRESSORAS (PODE VARIAR UM POUCO) ---
-OID_MODEL = '1.3.6.1.2.1.25.3.2.1.3.1'
-OID_SERIAL_NUMBER = '1.3.6.1.2.1.43.5.1.1.17.1'
-OID_TOTAL_PAGE_COUNT = '1.3.6.1.2.1.43.10.2.1.4.1.1'
-OID_TONER_LEVEL_MAX = '1.3.6.1.2.1.43.11.1.1.8.1.1' # Capacidade máxima do toner
-OID_TONER_LEVEL_CURRENT = '1.3.6.1.2.1.43.11.1.1.9.1.1' # Nível atual do toner
+# async def snmp_get(host, community, oid):
+# print(asyncio.run(snmp_get(PRINTER_IP, COMMUNITY_STRING, OID)))
 
-# --- BUSCANDO OS DADOS ---
-model = get_printer_info(PRINTER_IP, COMMUNITY_STRING, OID_MODEL)
-serial = get_printer_info(PRINTER_IP, COMMUNITY_STRING, OID_SERIAL_NUMBER)
-page_count = get_printer_info(PRINTER_IP, COMMUNITY_STRING, OID_TOTAL_PAGE_COUNT)
-toner_current = get_printer_info(PRINTER_IP, COMMUNITY_STRING, OID_TONER_LEVEL_CURRENT)
-toner_max = get_printer_info(PRINTER_IP, COMMUNITY_STRING, OID_TONER_LEVEL_MAX)
+PRINTER_IP_LIST = {
+    "COATL": "172.36.15.2",
+    "SEOFI": "10.12.5.5",
+    "COGPE": "10.12.5.4",
+    "COCAP": "172.24.15.3",
+    "COAES": "10.8.5.2",
+    "COTIN-TESTE (impressora do CPBA)": "10.8.5.3",
+    "DIR-02": "172.30.15.3",
+    "DIR-01 TERREO": "172.30.15.1",
+    "COETI (PRÉDIO INCUBADORA)": "172.27.15.2",
+    "COEXT (BOSQUE)": "172.22.15.3",
+    "SEMPC (ALMOXARIFADO)": "172.36.15.1",
+    "SEDAB": "172.21.15.1",
+    "SECEX": "172.30.15.2",
+    "COCIN": "172.22.15.5",
+    "SECRETARIA BOTANICA E MPGAP": "172.22.15.4",
+    "DIDAT": "172.24.15.7",
+    "COORDENAÇÃO COPES": "172.22.15.2",
+    "COORDENAÇÃO COBIO": "172.24.15.4",
+    "COORDENAÇÃO CODAM/CLIAMB": "172.24.15.2",
+    "COORDENAÇÃO COTEI": "172.23.15.1",
+    "COORDENAÇÃO COSAS": "172.22.15.6",
+    "Biotério Central (Lab. Temático)": "172.22.15.1",
+    "Quimica de Produtos Naturais (Lab. Temático)": "172.27.15.4",
+    "LBA": "10.16.8.1",
+    "SECRETARIA ENTOMOLOGIA": "172.20.15.3",
+    "SECRETARIA BADPI/GCBEV": "172.25.15.1",
+    "PREDIO COLEÇÕES":"172.26.15.1",
+    "Biologia Molecular (Lab. Temático)":"172.25.15.3",
+    "Microscopia e Nanotecnologia (Lab. Temático)":"172.25.15.2",
+    "PREFEITURA (PROX RESTAURANTE)":"172.28.15.4",
+    "POS ATU/CFT/ECO (COCAP)":"172.28.15.2",
+    "LTSP - Solos e Plantas (Lab. Temático)":"172.28.15.3",
+}
 
 
-print(f"Modelo da Impressora: {model}")
-print(f"Número de Série: {serial}")
-print(f"Contagem Total de Páginas: {page_count}")
+# print(asyncio.run(snmp_get("172.28.15.3", COMMUNITY_STRING, OID)))
 
-if toner_current is not None and toner_max is not None and int(toner_max) > 0:
-    toner_percentage = (int(toner_current) / int(toner_max)) * 100
-    print(f"Nível do Toner: {toner_current} / {toner_max} ({toner_percentage:.2f}%)")
+for sector, ip in PRINTER_IP_LIST.items():
+    # print(sector, ip)
+    print(f"{sector},{ip},{asyncio.run(snmp_get(ip, COMMUNITY_STRING, OID))}")
+    # print(asyncio.run(snmp_get(ip, COMMUNITY_STRING, OID)))
