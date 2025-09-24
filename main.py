@@ -1,48 +1,23 @@
 from snmpCnn import snmp_get
+from consts.PRINTER_IP_LIST import PRINTER_IP_LIST
+
 import asyncio
 
 
-PRINTER_IP = '172.36.15.2' # Substitua pelo IP da sua impressora
-COMMUNITY_STRING = 'public'   # Use a community string configurada na impressora
-OID = "1.3.6.1.4.1.11.2.3.9.4.2.1.4.1.2.5.0"
+""" 
+Capacidade máxima do toner: 1.3.6.1.2.1.43.11.1.1.8.1.1. // porcentagem
+Nível atual do toner: 1.3.6.1.2.1.43.11.1.1.9.1.1 // porcentagem de paginas restantes
+black: 1.3.6.1.2.1.43.12.1.1.4.1.1
+Instruções: 1.1.2.1.5.61.34.1.2.1.6.3.0
+Descrição: 1.3.6.1.2.1.43.16.5.1.2.1.1
+"""
+
+# PRINTER_IP = '172.36.15.2'
+COMMUNITY_STRING = 'public' # Meio de comunicação
+OID = "1.3.6.1.2.1.43.11.1.1.9.1.1"
 
 # async def snmp_get(host, community, oid):
 # print(asyncio.run(snmp_get(PRINTER_IP, COMMUNITY_STRING, OID)))
-
-PRINTER_IP_LIST = {
-    "COATL": "172.36.15.2",
-    "SEOFI": "10.12.5.5",
-    "COGPE": "10.12.5.4",
-    "COCAP": "172.24.15.3",
-    "COAES": "10.8.5.2",
-    "COTIN-TESTE (impressora do CPBA)": "10.8.5.3",
-    "DIR-02": "172.30.15.3",
-    "DIR-01 TERREO": "172.30.15.1",
-    "COETI (PRÉDIO INCUBADORA)": "172.27.15.2",
-    "COEXT (BOSQUE)": "172.22.15.3",
-    "SEMPC (ALMOXARIFADO)": "172.36.15.1",
-    "SEDAB": "172.21.15.1",
-    "SECEX": "172.30.15.2",
-    "COCIN": "172.22.15.5",
-    "SECRETARIA BOTANICA E MPGAP": "172.22.15.4",
-    "DIDAT": "172.24.15.7",
-    "COORDENAÇÃO COPES": "172.22.15.2",
-    "COORDENAÇÃO COBIO": "172.24.15.4",
-    "COORDENAÇÃO CODAM/CLIAMB": "172.24.15.2",
-    "COORDENAÇÃO COTEI": "172.23.15.1",
-    "COORDENAÇÃO COSAS": "172.22.15.6",
-    "Biotério Central (Lab. Temático)": "172.22.15.1",
-    "Quimica de Produtos Naturais (Lab. Temático)": "172.27.15.4",
-    "LBA": "10.16.8.1",
-    "SECRETARIA ENTOMOLOGIA": "172.20.15.3",
-    "SECRETARIA BADPI/GCBEV": "172.25.15.1",
-    "PREDIO COLEÇÕES":"172.26.15.1",
-    "Biologia Molecular (Lab. Temático)":"172.25.15.3",
-    "Microscopia e Nanotecnologia (Lab. Temático)":"172.25.15.2",
-    "PREFEITURA (PROX RESTAURANTE)":"172.28.15.4",
-    "POS ATU/CFT/ECO (COCAP)":"172.28.15.2",
-    "LTSP - Solos e Plantas (Lab. Temático)":"172.28.15.3",
-}
 
 
 # print(asyncio.run(snmp_get("172.28.15.3", COMMUNITY_STRING, OID)))

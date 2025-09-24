@@ -21,10 +21,10 @@ async def snmp_get(host, community, oid):
 
     if errorIndication:
         # print(errorIndication)
-        return None
+        return errorIndication
     elif errorStatus:
         # print(f'{errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"}')
-        return None
+        return f'{errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"}'
     else:
         for varBind in varBinds:
             # print(varBind)

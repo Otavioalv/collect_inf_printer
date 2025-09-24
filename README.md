@@ -1,0 +1,2 @@
+Identificar modelo
+criar para impressoras coloridas
