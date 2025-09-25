@@ -14,7 +14,8 @@ Descrição: 1.3.6.1.2.1.43.16.5.1.2.1.1
 
 # PRINTER_IP = '172.36.15.2'
 COMMUNITY_STRING = 'public' # Meio de comunicação
-OID = "1.3.6.1.2.1.43.11.1.1.9.1.1"
+OID = "1.3.6.1.2.1.43.10.2.1.4.1.1"
+# OID = "1.3.6.1.2.1.43.5.1.1.17.1"
 
 # async def snmp_get(host, community, oid):
 # print(asyncio.run(snmp_get(PRINTER_IP, COMMUNITY_STRING, OID)))

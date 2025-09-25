@@ -4,7 +4,6 @@ import pprint
 
 # snmpwalk -v2c -c public 192.168.x.x
 # oid (1.3.6.1.2.1) Descrição aparelho
-
 async def snmp_get(host, community, oid):
     snmpEngine = SnmpEngine()
     
