@@ -48,16 +48,28 @@ class printterController():
             prttr_total_page_list = []
             
             for sector, ip in PRINTER_IP_LIST.items():
-                
                 max_paper_capacity = 8000
                 total_page_counter = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.10.2.1.4.1.1")
-                current_toner_level = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.11.1.1.9.1.1")
                 
-                average_printer = int(current_toner_level / 48)
+                current_toner_level = 0
+                model = 0
+                serial_number = 0
+                average_printer = 0
+                count_to_print = 0
+                
+                if(total_page_counter):
+                    current_toner_level = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.11.1.1.9.1.1")
+                    model = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.25.3.2.1.3.1")
+                    serial_number = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.5.1.1.17.1")
+                    
+                    average_printer = int(current_toner_level / 48)
+                    count_to_print = int((current_toner_level / 100) * max_paper_capacity)
+                
                 format_datetime = "%d/%m/%Y %H:%M:%S"
                 datetime_now = datetime.now().strftime(format_datetime)
                 
-                count_to_print = int((current_toner_level / 100) * max_paper_capacity)
+                
+                # print("sucess" if total_page_counter else "error")
                 
                 prttr_total_page = {
                     "ip": ip,
@@ -66,12 +78,16 @@ class printterController():
                     "at_date": datetime_now,
                     "current_toner_level": current_toner_level,
                     "average_printer": average_printer,
-                    "count_to_print": count_to_print
+                    "count_to_print": count_to_print,
+                    "model": model,
+                    "sn": serial_number,
+                    "status": "sucess" if total_page_counter else "error"
                 }
                 
                 prttr_total_page_list.append(prttr_total_page)
                 
-                pprint.pprint(prttr_total_page_list)
+                pprint.pprint(prttr_total_page)
+                # pprint.pprint(prttr_total_page_list)
             
             return jsonify({
                 "message": "Dados das impressoras coletadas com sucesso",

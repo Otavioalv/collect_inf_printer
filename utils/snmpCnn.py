@@ -31,9 +31,10 @@ async def snmp_get(host, community, oid):
                 value = varBind[1]
                 
                 # adicionar mais verificações
-                if (isinstance(value, Counter32) or isinstance(value, Integer32)):
+                if(isinstance(value, Counter32) or isinstance(value, Integer32)):
                     return int(value or "0")
-                
+                elif(isinstance(value, OctetString)):
+                    return value.asOctets().decode("utf-8")
                 
                 # if isinstance(value, OctetString):
                 #     # Tenta decodificar como texto
