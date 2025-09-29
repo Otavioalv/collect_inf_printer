@@ -87,11 +87,21 @@ class printterController():
                 prttr_total_page_list.append(prttr_total_page)
                 
                 pprint.pprint(prttr_total_page)
-                # pprint.pprint(prttr_total_page_list)
+                
+                
+            cvs_format = ""
+            for prttr_list in prttr_total_page_list:
+                print(f"{prttr_list["ip"]},{prttr_list["sector"]},{prttr_list["total_page_counter"]},{prttr_list["at_date"]},{prttr_list["current_toner_level"]},{prttr_list["average_printer"]},{prttr_list["count_to_print"]},{prttr_list["model"]},{prttr_list["sn"]},{prttr_list["status"]}")
+                cvs_format += f"""{prttr_list["ip"]},{prttr_list["sector"]},{prttr_list["total_page_counter"]},{prttr_list["at_date"]},{prttr_list["current_toner_level"]},{prttr_list["average_printer"]},{prttr_list["count_to_print"]},{prttr_list["model"]},{prttr_list["sn"]},{prttr_list["status"]}\n"""
+                    
+                                    
             
             return jsonify({
                 "message": "Dados das impressoras coletadas com sucesso",
-                "results": prttr_total_page_list
+                "results": {
+                    "printer_list": prttr_total_page_list,
+                    "cvs_format": cvs_format
+                }
             })
         except Exception as err: 
             print(err)

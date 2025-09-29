@@ -21,7 +21,7 @@ OID = "1.3.6.1.2.1.43.10.2.1.4.1.1"
 # print(asyncio.run(snmp_get(PRINTER_IP, COMMUNITY_STRING, OID)))
 
 
-print(asyncio.run(snmp_get("10.16.8.1", COMMUNITY_STRING, "1.3.6.1.2.1.25.3.2.1.3.1")))
+# print(asyncio.run(snmp_get("10.16.8.1", COMMUNITY_STRING, "1.3.6.1.2.1.25.3.2.1.3.1")))
 
 # serial_number = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.5.1.1.17.1")
 
@@ -29,4 +29,4 @@ print(asyncio.run(snmp_get("10.16.8.1", COMMUNITY_STRING, "1.3.6.1.2.1.25.3.2.1.
 # for sector, ip in PRINTER_IP_LIST.items():
 #     # print(sector, ip)
 #     print(f"{sector},{ip},{asyncio.run(snmp_get(ip, COMMUNITY_STRING, OID))}")
-    # print(asyncio.run(snmp_get(ip, COMMUNITY_STRING, OID)))
+#     print(asyncio.run(snmp_get(ip, COMMUNITY_STRING, OID)))
