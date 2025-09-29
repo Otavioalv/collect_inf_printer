@@ -1,0 +1,12 @@
+export type printerData = {
+    at_date: string;
+    average_printer: number;
+    count_to_print: number;
+    current_toner_level: number;
+    ip: string;
+    model: string;
+    sector: string;
+    sn: string;
+    status: string;
+    total_page_counter: number;
+}

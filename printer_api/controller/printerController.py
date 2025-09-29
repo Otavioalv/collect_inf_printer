@@ -1,14 +1,14 @@
 from flask import jsonify
-from model.printterModel import printterModel
+from model.printerModel import printerModel
 from consts.PRINTER_IP_LIST import PRINTER_IP_LIST
 from datetime import datetime
 import pprint
 import asyncio
 
-class printterController():
+class printerController():
     
     def __init__(self):
-        self.printter_md = printterModel()
+        self.printer_md = printerModel()
         
     async def total_page_counter_list(self):
         try:
@@ -16,7 +16,7 @@ class printterController():
             
             for sector, ip in PRINTER_IP_LIST.items():
                 
-                total_page_counter = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.10.2.1.4.1.1")
+                total_page_counter = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.10.2.1.4.1.1")
                 format_datetime = "%d/%m/%Y %H:%M:%S"
                 datetime_now = datetime.now().strftime(format_datetime)
                 
@@ -42,14 +42,14 @@ class printterController():
                 "results": []
             })
             
-    async def printter_info(self):
+    async def printer_info(self):
         try:
             
             prttr_total_page_list = []
             
             for sector, ip in PRINTER_IP_LIST.items():
                 max_paper_capacity = 8000
-                total_page_counter = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.10.2.1.4.1.1")
+                total_page_counter = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.10.2.1.4.1.1")
                 
                 current_toner_level = 0
                 model = 0
@@ -58,9 +58,9 @@ class printterController():
                 count_to_print = 0
                 
                 if(total_page_counter):
-                    current_toner_level = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.11.1.1.9.1.1")
-                    model = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.25.3.2.1.3.1")
-                    serial_number = await self.printter_md.printter_snmp_connect(ip, "1.3.6.1.2.1.43.5.1.1.17.1")
+                    current_toner_level = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.11.1.1.9.1.1")
+                    model = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.25.3.2.1.3.1")
+                    serial_number = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.5.1.1.17.1")
                     
                     average_printer = int(current_toner_level / 48)
                     count_to_print = int((current_toner_level / 100) * max_paper_capacity)

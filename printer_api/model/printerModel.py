@@ -3,13 +3,13 @@ from datetime import datetime
 import pprint
 import asyncio
 
-class printterModel():
+class printerModel():
     
     # def __init__(self):
     #     print("Iniciado Model")
         
         
-    async def get_total_page_counter(self, ip_printter):
+    async def get_total_page_counter(self, ip_printer):
         try:
             OID = "1.3.6.1.2.1.43.10.2.1.4.1.1"
             COMMUNITY_STRING = 'public'
@@ -18,31 +18,31 @@ class printterModel():
                 ip, setor, contador
             """
             
-            total_page_counter = await snmp_get(ip_printter, COMMUNITY_STRING, OID)
+            total_page_counter = await snmp_get(ip_printer, COMMUNITY_STRING, OID)
             
             return total_page_counter
         except Exception as err: 
             print("printtterModel.get_total_page_counter >>> ", err)
             return []
     
-    async def printter_snmp_connect(self, ip_printter, oid):
+    async def printer_snmp_connect(self, ip_printer, oid):
         try:
             # OID = "1.3.6.1.2.1.43.10.2.1.4.1.1"
             COMMUNITY_STRING = 'public'
             
-            total_page_counter = await snmp_get(ip_printter, COMMUNITY_STRING, oid)
+            total_page_counter = await snmp_get(ip_printer, COMMUNITY_STRING, oid)
             
             return total_page_counter or 0
         except Exception as err: 
             print("printtterModel.get_total_page_counter >>> ", err)
             return []
         
-    async def current_toner_level(self, ip_printter):
+    async def current_toner_level(self, ip_printer):
         try:
             OID = "1.3.6.1.2.1.43.10.2.1.4.1.1"
             COMMUNITY_STRING = 'public'
             
-            total_page_counter = await snmp_get(ip_printter, COMMUNITY_STRING, OID)
+            total_page_counter = await snmp_get(ip_printer, COMMUNITY_STRING, OID)
             
             return total_page_counter
         except Exception as err: 
