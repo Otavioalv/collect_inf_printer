@@ -1,0 +1,4 @@
+.toner-grafic::after {
+    width: var(--toner-percent);
+
+}

@@ -81,7 +81,8 @@ class printerController():
                     "count_to_print": count_to_print,
                     "model": model,
                     "sn": serial_number,
-                    "status": "sucess" if total_page_counter else "error"
+                    "status": "sucess" if total_page_counter else "error",
+                    "max_paper_capacity": max_paper_capacity
                 }
                 
                 prttr_total_page_list.append(prttr_total_page)

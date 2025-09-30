@@ -19,10 +19,10 @@ async def snmp_get(host, community, oid):
         errorIndication, errorStatus, errorIndex, varBinds = await iterator
 
         if errorIndication:
-            print(f"snmp_get ERROR >>> {errorIndication}\n")
+            # print(f"snmp_get ERROR >>> {errorIndication}\n")
             return None
         elif errorStatus:
-            print(f'snmp_get ERROR >>> {errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"} \n')
+            # print(f'snmp_get ERROR >>> {errorStatus.prettyPrint()} at {errorIndex and varBinds[int(errorIndex) - 1][0] or "?"} \n')
             
             return None
         else:
@@ -49,7 +49,7 @@ async def snmp_get(host, community, oid):
                 #     print(int(value))
             return value
     except Exception as err:
-        print(f"snmp_get ERROR >>> {err}\n")
+        # print(f"snmp_get ERROR >>> {err}\n")
         return None
     
     
