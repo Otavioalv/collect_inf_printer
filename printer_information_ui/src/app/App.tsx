@@ -3,7 +3,7 @@ import './App.css'
 
 function App() {
   return (
-    <div className=''>
+    <div className='py-6 sm:px-3 flex justify-center'>
       <ListPrinters/>
     </div>
   )

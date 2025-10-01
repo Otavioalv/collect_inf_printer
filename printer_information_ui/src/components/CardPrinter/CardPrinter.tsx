@@ -9,7 +9,13 @@ import  "./styles.css"
 
 export const CardPrinter = ({printerInfo}: {printerInfo: printerData}) => {
     return (
-        <div className="flex flex-col gap-3 p-4 rounded-lg border border-zinc-300 bg-white text-slate-900 w-[450px]">
+        <div className="
+            flex flex-col gap-3 
+            p-4 rounded-lg 
+            border border-zinc-300 
+            bg-white text-slate-900 
+            w-full box-border 
+        ">
             {/* MODELE & STATUS*/}
             <div className="flex justify-between gap-9">
                 
