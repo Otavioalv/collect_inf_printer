@@ -1,5 +1,5 @@
 import { printerInfo} from "@/services/printerService"
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CardPrinter } from "../CardPrinter/CardPrinter";
 import { SearchFilter } from "../SearchFilter/SearchFilter";
 
@@ -10,7 +10,7 @@ import type { printerData } from "@/types/printerTypes";
 
 export const ListPrinters = () => {
     const [printers, setPrinters] = useState<printerInfoType>({cvs_format: "", printer_list: []});
-
+    const [printerList, setPrinterList] = useState<printerData[]>([]);
 
     const fetchPrinterInfo = async() => {
         setPrinters(await printerInfo());
@@ -20,6 +20,10 @@ export const ListPrinters = () => {
         fetchPrinterInfo()
     }, []);
 
+    useMemo(() => {
+        setPrinterList(printers.printer_list);
+    }, [printers.printer_list]);
+
     return (
         <section className="
             flex flex-col justify-center items-center 
@@ -27,10 +31,10 @@ export const ListPrinters = () => {
             md:w-4/5
             2xl:w-[100em]
         ">
-            <SearchFilter/>
+            <SearchFilter printerList={printerList} setPrintesList={setPrinterList}/>
             
             <p className="w-full text-zinc-500 font-semibold ">
-                Mostrando {printers.printer_list.length} de {printers.printer_list.length} impressoras
+                Mostrando {printerList.length} de {printerList.length} impressoras
             </p>
 
             {/* Lista de impresoras */}
@@ -41,7 +45,7 @@ export const ListPrinters = () => {
                 2xl:grid-cols-3
                 gap-4 box-border
             ">
-                {printers.printer_list.map((data:printerData, i) => (
+                {printerList.map((data:printerData, i) => (
                     // Card
                     <CardPrinter printerInfo={data} key={i}/>
                 ))}

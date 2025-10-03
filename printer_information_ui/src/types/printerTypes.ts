@@ -7,6 +7,6 @@ export type printerData = {
     model: string;
     sector: string;
     sn: string;
-    status: string;
+    status: "sucess" | "error";
     total_page_counter: number;
 }

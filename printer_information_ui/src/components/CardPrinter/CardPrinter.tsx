@@ -36,7 +36,7 @@ export const CardPrinter = ({printerInfo}: {printerInfo: printerData}) => {
                     {printerInfo.status == "sucess" ? (
                         <FiCheckCircle/>
                     ) : (
-                        <TiDeleteOutline/>
+                        <TiDeleteOutline className="text-xl"/>
                     )}
                     
                     <span>
