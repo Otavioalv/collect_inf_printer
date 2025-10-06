@@ -31,14 +31,13 @@ export const ListPrinters = () => {
             md:w-4/5
             2xl:w-[100em]
         ">
-            <SearchFilter printerList={printerList} setPrintesList={setPrinterList}/>
+            <SearchFilter listToFilter={printerList} setListToFilter={setPrinterList}/>
             
             <p className="w-full text-zinc-500 font-semibold ">
                 Mostrando {printerList.length} de {printerList.length} impressoras
             </p>
 
             {/* Lista de impresoras */}
-            {/* <div className="flex flex-wrap box-border w-full bg-red-400"> */}
             <div className="
                 grid w-full grid-cols-1
                 lg:grid-cols-2
