@@ -31,7 +31,7 @@ export const FilterOptions = ({listOptions, defaultValue, optionSelected, setOpt
     return (
         <div
             className="
-                2xl:w-36 
+                2xl:w-56
                 w-2/4
                 transition-all
                 relative

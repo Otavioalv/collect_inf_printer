@@ -3,6 +3,7 @@ import { FiCheckCircle } from "react-icons/fi";
 import { TiDeleteOutline } from "react-icons/ti";
 import { FaHashtag } from "react-icons/fa";
 import { FaRegCalendar } from "react-icons/fa";
+import { RiPaintLine } from "react-icons/ri";
 
 import type { printerData } from "@/types/printerTypes"
 import  "./styles.css"
@@ -58,6 +59,22 @@ export const CardPrinter = ({printerInfo}: {printerInfo: printerData}) => {
                     <p className="text-zinc-500">IP: </p>
                     <span className="font-medium">{printerInfo.ip}</span>
                 </div>
+            </div>
+
+            {/* Nome do toner */}
+            <div className="flex justify-between gap-9">
+                <div className="flex justify-center items-center gap-2">
+                    <RiPaintLine className="text-zinc-500"/>
+
+                    {/* <p className="text-zinc-500">Nome do toner: </p> */}
+                    <span className="font-medium">{printerInfo.toner_name}</span>
+                </div>
+                
+                {/* <div className="flex justify-center items-center gap-2">
+                    <FaHashtag className="text-zinc-500"/>
+                    <p className="text-zinc-500">IP: </p>
+                    <span className="font-medium">{printerInfo.ip}</span>
+                </div> */}
             </div>
 
             {/* Percentual do nivel do toner */}

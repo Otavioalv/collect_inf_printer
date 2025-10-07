@@ -1,28 +1,25 @@
-import { printerInfo} from "@/services/printerService"
-import { useEffect, useMemo, useState } from "react";
+import { printerInfo } from "@/services/printerService";
+import { useEffect, useState } from "react";
 import { CardPrinter } from "../CardPrinter/CardPrinter";
 import { SearchFilter } from "../SearchFilter/SearchFilter";
 
-
-import type { printerInfoType } from "@/services/printerService";
 import type { printerData } from "@/types/printerTypes";
 
-
 export const ListPrinters = () => {
-    const [printers, setPrinters] = useState<printerInfoType>({cvs_format: "", printer_list: []});
-    const [printerList, setPrinterList] = useState<printerData[]>([]);
-
-    const fetchPrinterInfo = async() => {
-        setPrinters(await printerInfo());
-    }
+    // Estado para guardar a lista original e imutável de impressoras
+    const [allPrinters, setAllPrinters] = useState<printerData[]>([]);
+    // Estado para a lista que será exibida (e modificada pelo filtro)
+    const [displayedPrinters, setDisplayedPrinters] = useState<printerData[]>([]);
 
     useEffect(() => {
-        fetchPrinterInfo()
+        const fetchPrinterInfo = async () => {
+            const data = await printerInfo();
+            // Define ambos os estados com os dados iniciais
+            setAllPrinters(data.printer_list);
+            setDisplayedPrinters(data.printer_list);
+        }
+        fetchPrinterInfo();
     }, []);
-
-    useMemo(() => {
-        setPrinterList(printers.printer_list);
-    }, [printers.printer_list]);
 
     return (
         <section className="
@@ -31,10 +28,14 @@ export const ListPrinters = () => {
             md:w-4/5
             2xl:w-[100em]
         ">
-            <SearchFilter listToFilter={printerList} setListToFilter={setPrinterList}/>
+            <SearchFilter 
+                originalList={allPrinters} 
+                onFilterChange={setDisplayedPrinters} // Passamos a função de setState da lista exibida
+            />
             
             <p className="w-full text-zinc-500 font-semibold ">
-                Mostrando {printerList.length} de {printerList.length} impressoras
+                {/* Mostra a contagem da lista filtrada e da lista total */}
+                Mostrando {displayedPrinters.length} de {allPrinters.length} impressoras
             </p>
 
             {/* Lista de impresoras */}
@@ -44,9 +45,10 @@ export const ListPrinters = () => {
                 2xl:grid-cols-3
                 gap-4 box-border
             ">
-                {printerList.map((data:printerData, i) => (
+                {/* Mapeia a lista filtrada 'displayedPrinters' */}
+                {displayedPrinters.map((data: printerData, i) => (
                     // Card
-                    <CardPrinter printerInfo={data} key={i}/>
+                    <CardPrinter printerInfo={data} key={i} />
                 ))}
             </div>
         </section>

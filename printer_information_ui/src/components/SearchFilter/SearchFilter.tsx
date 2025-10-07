@@ -1,27 +1,30 @@
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { FiFilter } from "react-icons/fi";
+import { FiFilter, FiX } from "react-icons/fi";
 import { FilterOptions } from "../FilterOptions/FilterOptions";
-import { FiX } from "react-icons/fi";
 
-import { useEffect, useState, type ChangeEvent, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, useMemo } from "react";
+import type { ChangeEvent, Dispatch, SetStateAction} from "react";
 import type { printerData } from "@/types/printerTypes";
 
 export type searchFilterProps = {
-    listToFilter: printerData[]
-    setListToFilter: Dispatch<SetStateAction<printerData[]>>
+    originalList: printerData[]; 
+    onFilterChange: Dispatch<SetStateAction<printerData[]>>; 
 }
 
-// Realizar filtro da lista
-export const SearchFilter = ({listToFilter, setListToFilter}: searchFilterProps) => {
+export const SearchFilter = ({ originalList, onFilterChange }: searchFilterProps) => {
     
-    const [fullList, ] = useState<printerData[]>(listToFilter);
-
     const [statusFilter, setStatusFilter] = useState<string>("Todos");
     const [colorFilter, setColorFilter] = useState<string>("Todos");
     const [textFilter, setTextFilter] = useState<string>("");
 
-    const handleSetTextFilter = (e:ChangeEvent<HTMLInputElement>) => {
-        setTextFilter(e.target.value)
+    const colorList = useMemo(() => {
+        return [...new Set(originalList.map(item => item.toner_name))];
+    }, [originalList]);
+
+    const statusList: string[] = ["sucess", "error"];
+
+    const handleSetTextFilter = (e: ChangeEvent<HTMLInputElement>) => {
+        setTextFilter(e.target.value);
     } 
 
     const handleResetFilter = () => {
@@ -29,12 +32,28 @@ export const SearchFilter = ({listToFilter, setListToFilter}: searchFilterProps)
         setColorFilter("Todos");
         setTextFilter("");
 
-        setListToFilter(fullList)
+        onFilterChange(originalList); 
     }
 
+    // O useEffect agora é responsável apenas por aplicar os filtros e notificar o pai.
     useEffect(() => {
-        console.log(statusFilter, colorFilter, textFilter);
-    }, [statusFilter, colorFilter, textFilter]);
+        const filteredList = originalList.filter((item) => {
+            const statusMatch = statusFilter === "Todos" || item.status === statusFilter;
+            const colorMatch = colorFilter === "Todos" || item.toner_name === colorFilter;
+            
+            const textMatch = !textFilter || (
+                item.model.trim().toUpperCase().includes(textFilter.trim().toUpperCase()) ||
+                item.ip.trim().includes(textFilter.trim().toUpperCase()) ||
+                item.sector.trim().toUpperCase().includes(textFilter.trim().toUpperCase())
+            );
+
+            return statusMatch && colorMatch && textMatch;
+        });
+
+        // Chama a função do pai com a lista já filtrada
+        onFilterChange(filteredList);
+        
+    }, [statusFilter, colorFilter, textFilter, originalList, onFilterChange]);
 
     return (
         <section 
@@ -84,20 +103,18 @@ export const SearchFilter = ({listToFilter, setListToFilter}: searchFilterProps)
 
                 {/* Status */}
                 <FilterOptions 
-                    listOptions={["sucess", "error"]} 
+                    listOptions={statusList} 
                     defaultValue="Todos"
                     optionSelected={statusFilter}
                     setOptionSelected={setStatusFilter}
                 />
                 {/* Color */}
                 <FilterOptions 
-                    listOptions={["color", "P&B"]} 
+                    listOptions={colorList} 
                     defaultValue="Todos"
                     optionSelected={colorFilter}
                     setOptionSelected={setColorFilter}
                 />
-
-
 
                 {/* Botão para resetar filtro */}
                 <button 

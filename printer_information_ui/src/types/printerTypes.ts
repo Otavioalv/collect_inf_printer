@@ -9,4 +9,8 @@ export type printerData = {
     sn: string;
     status: "sucess" | "error";
     total_page_counter: number;
+    toner_name: string;
+
+    // temp
+    max_paper_capacity: number
 }
