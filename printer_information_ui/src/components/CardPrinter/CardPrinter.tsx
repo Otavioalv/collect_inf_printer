@@ -12,7 +12,7 @@ export const CardPrinter = ({printerInfo}: {printerInfo: printerData}) => {
     return (
         <div className="
             flex flex-col gap-3 
-            p-4 rounded-lg 
+            p-5 rounded-lg 
             border border-zinc-300 
             bg-white text-slate-900 
             w-full box-border 

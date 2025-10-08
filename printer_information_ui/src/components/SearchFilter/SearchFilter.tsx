@@ -59,6 +59,7 @@ export const SearchFilter = ({ originalList, onFilterChange }: searchFilterProps
         <section 
             className="
                 flex w-full bg-white p-4
+                border border-zinc-300
                 rounded-lg
                 md:flex-row
                 flex-col

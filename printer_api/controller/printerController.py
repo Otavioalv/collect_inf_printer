@@ -61,6 +61,7 @@ class printerController():
                     current_toner_level = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.11.1.1.9.1.1")
                     model = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.25.3.2.1.3.1")
                     serial_number = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.5.1.1.17.1")
+                    toner_name = await self.printer_md.printer_snmp_connect(ip, "1.3.6.1.2.1.43.11.1.1.6.1.1")
                     
                     average_printer = int(current_toner_level / 48)
                     count_to_print = int((current_toner_level / 100) * max_paper_capacity)
@@ -82,7 +83,8 @@ class printerController():
                     "model": model,
                     "sn": serial_number,
                     "status": "sucess" if total_page_counter else "error",
-                    "max_paper_capacity": max_paper_capacity
+                    "max_paper_capacity": max_paper_capacity,
+                    "toner_name": toner_name
                 }
                 
                 prttr_total_page_list.append(prttr_total_page)
