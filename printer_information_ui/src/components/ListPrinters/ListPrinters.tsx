@@ -9,6 +9,8 @@ import { FiCheckCircle } from "react-icons/fi";
 import { RxLightningBolt } from "react-icons/rx";
 
 import type { printerData } from "@/types/printerTypes";
+import { LoadingList } from "../LoadingList/LoadingList";
+import { Button } from "../Button/Button";
 
 
 export const ListPrinters = () => {
@@ -27,6 +29,11 @@ export const ListPrinters = () => {
     const [totalErrorPercent, setTotalErrorPercent] = useState<number>(0);
     // Nivel do toner
     const [tonerLevelM , setTonerLevelM] = useState<number>(0);
+
+    const [textCsv, setTextCsv] = useState<string>("");
+
+    const [loading, setLoading] = useState<boolean>(false);
+
 
 
 
@@ -58,14 +65,28 @@ export const ListPrinters = () => {
     }  
     
 
+    const copyCsv = () => {
+        navigator.clipboard.writeText(textCsv)
+        .then(() => {
+            console.log("Copiado");
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     useEffect(() => {
         const fetchPrinterInfo = async () => {
+            setLoading(true);
+            
             const data = await printerInfo();
             // Define ambos os estados com os dados iniciais
+            setTextCsv(data.cvs_format);
             setAllPrinters(data.printer_list);
             setDisplayedPrinters(data.printer_list);
+            // setInfoPrinters(data.printer_list);
 
-            setInfoPrinters(data.printer_list);
+            setLoading(false);
         }
         fetchPrinterInfo();
     }, []);
@@ -77,7 +98,8 @@ export const ListPrinters = () => {
             md:w-4/5
             2xl:w-[100em]
         ">  
-            <div className="flex gap-4 justify-between w-full">
+            {/* <div className="flex gap-4 justify-between w-full"> */}
+            {/* <div className="flex sm:flex-row flex-col gap-4 justify-between w-full">
                 <CardInfoBox 
                     title="Total de impressoras" 
                     value={totalPrinters} 
@@ -103,7 +125,7 @@ export const ListPrinters = () => {
                     percent={tonerLevelM}
                     description="nível médio do toner" 
                     iconCard={RxLightningBolt}/>
-            </div>
+            </div> */}
 
 
             <SearchFilter 
@@ -111,10 +133,18 @@ export const ListPrinters = () => {
                 onFilterChange={setDisplayedPrinters} // Passamos a função de setState da lista exibida
             />
             
-            <p className="w-full text-zinc-500 font-semibold ">
-                {/* Mostra a contagem da lista filtrada e da lista total */}
-                Mostrando {displayedPrinters.length} de {allPrinters.length} impressoras
-            </p>
+            <div className="flex justify-between w-full">
+                <p className="w-full text-zinc-500 font-semibold ">
+                    {/* Mostra a contagem da lista filtrada e da lista total */}
+                    Mostrando {displayedPrinters.length} de {allPrinters.length} impressoras
+                </p>
+
+
+                <div className="flex gap-2 w-full justify-end">
+                    <Button name={"Copiar CSV"} onClick={copyCsv}/>
+                    {/* <Button name={"Download CSV"}/> */}
+                </div>
+            </div>
 
             {/* Lista de impresoras */}
             <div className="
@@ -123,6 +153,8 @@ export const ListPrinters = () => {
                 2xl:grid-cols-3
                 gap-4 box-border
             ">
+                {loading && <LoadingList/>}
+
                 {/* Mapeia a lista filtrada 'displayedPrinters' */}
                 {displayedPrinters.map((data: printerData, i) => (
                     // Card

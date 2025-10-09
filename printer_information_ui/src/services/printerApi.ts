@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // http://10.8.1.36:5000/printer/get_printer_info
-const URL:string = "http://10.8.1.36";
+// nocao: http://192.168.1.145/
+// aphelpdesk: http://10.8.1.53
+const URL:string = "http://10.8.1.53";
 const PORT:string = "5000";
 
 // const baseUrl:string = `http://10.8.1.36:5000`;

@@ -36,10 +36,11 @@ export const CardInfoBox = ({description, title, value, iconCard: Icon, percent,
             w-full
             flex
             flex-col
+            
             gap-2
             "
         >
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
                 <span className="font-bold text-lg text-slate-900 ">
                     {title}
                 </span>
