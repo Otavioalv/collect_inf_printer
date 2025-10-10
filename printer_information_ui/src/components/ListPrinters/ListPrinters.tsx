@@ -8,9 +8,11 @@ import { LuPrinter, LuTriangleAlert } from "react-icons/lu";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxLightningBolt } from "react-icons/rx";
 
-import type { printerData } from "@/types/printerTypes";
 import { LoadingList } from "../LoadingList/LoadingList";
 import { Button } from "../Button/Button";
+
+import type { printerData } from "@/types/printerTypes";
+import { transformCsv } from "@/utils/transformCsv";
 
 
 export const ListPrinters = () => {
@@ -65,14 +67,25 @@ export const ListPrinters = () => {
     }  
     
 
-    const copyCsv = () => {
-        navigator.clipboard.writeText(textCsv)
-        .then(() => {
-            console.log("Copiado");
-        })
-        .catch(err => {
-            console.log(err);
-        });
+    // const copyCsv = () => {
+    //     console.log(textCsv)
+    //     navigator.clipboard.writeText(textCsv)
+    //     .then(() => {
+    //         console.log("Copiado");
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //     });
+    // }
+
+
+    const downloadCsvUrl = (): string => {
+
+        const header: string[] = ["IP", "SETOR", "CONTADOR", "DATA/HORA", "P&B%", "COPIAS", "RESTANTE DE PAGINAS", "MODELO", "SERIAL", "STATUS"];
+
+        const strUrl:string = URL.createObjectURL(transformCsv(textCsv, header.join(",")));
+
+        return strUrl;
     }
 
     useEffect(() => {
@@ -84,7 +97,7 @@ export const ListPrinters = () => {
             setTextCsv(data.cvs_format);
             setAllPrinters(data.printer_list);
             setDisplayedPrinters(data.printer_list);
-            // setInfoPrinters(data.printer_list);
+            setInfoPrinters(data.printer_list);
 
             setLoading(false);
         }
@@ -98,8 +111,18 @@ export const ListPrinters = () => {
             md:w-4/5
             2xl:w-[100em]
         ">  
+            <div className="w-full">
+                <h1
+                    className="text-3xl font-bold text-slate-900"
+                >
+                    Dashboard de Impressoras
+                </h1>
+                <p className="text-zinc-500 font-semibold">
+                    Monitoramento em tempo real de {allPrinters.length} impressoras
+                </p>
+            </div>
             {/* <div className="flex gap-4 justify-between w-full"> */}
-            {/* <div className="flex sm:flex-row flex-col gap-4 justify-between w-full">
+            <div className="flex sm:flex-row flex-col gap-4 justify-between w-full">
                 <CardInfoBox 
                     title="Total de impressoras" 
                     value={totalPrinters} 
@@ -125,7 +148,9 @@ export const ListPrinters = () => {
                     percent={tonerLevelM}
                     description="nível médio do toner" 
                     iconCard={RxLightningBolt}/>
-            </div> */}
+            </div>
+
+            
 
 
             <SearchFilter 
@@ -141,7 +166,17 @@ export const ListPrinters = () => {
 
 
                 <div className="flex gap-2 w-full justify-end">
-                    <Button name={"Copiar CSV"} onClick={copyCsv}/>
+                    {/* <Button name={"Copiar CSV"} onClick={copyCsv}/> */}
+                    
+                    <Button>
+                        <a
+                            href={downloadCsvUrl()}
+                            download={"lista_impressoras.csv"}
+                        > 
+                            Download CSV
+                        </a>
+                    </Button>
+
                     {/* <Button name={"Download CSV"}/> */}
                 </div>
             </div>

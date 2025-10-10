@@ -42,9 +42,9 @@ export const SearchFilter = ({ originalList, onFilterChange }: searchFilterProps
             const colorMatch = colorFilter === "Todos" || item.toner_name === colorFilter;
             
             const textMatch = !textFilter || (
-                item.model.trim().toUpperCase().includes(textFilter.trim().toUpperCase()) ||
-                item.ip.trim().includes(textFilter.trim().toUpperCase()) ||
-                item.sector.trim().toUpperCase().includes(textFilter.trim().toUpperCase())
+                String(item.model || "")?.trim().toUpperCase().includes(textFilter.trim().toUpperCase()) ||
+                String(item.ip || "")?.trim().includes(textFilter.trim().toUpperCase()) ||
+                String(item.sector || "")?.trim().toUpperCase().includes(textFilter.trim().toUpperCase())
             );
 
             return statusMatch && colorMatch && textMatch;
