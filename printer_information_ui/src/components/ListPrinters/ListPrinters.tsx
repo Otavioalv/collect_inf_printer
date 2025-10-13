@@ -89,8 +89,9 @@ export const ListPrinters = () => {
     }
 
     useEffect(() => {
-        const fetchPrinterInfo = async () => {
-            setLoading(true);
+        const fetchPrinterInfo = async (isInitialLoading = false) => {
+            if(isInitialLoading)
+                setLoading(true);
             
             const data = await printerInfo();
             // Define ambos os estados com os dados iniciais
@@ -99,9 +100,19 @@ export const ListPrinters = () => {
             setDisplayedPrinters(data.printer_list);
             setInfoPrinters(data.printer_list);
 
-            setLoading(false);
+            if(isInitialLoading)
+                setLoading(false);
         }
-        fetchPrinterInfo();
+        
+        fetchPrinterInfo(true);
+
+        // Atualização a cada 15min
+        const intervalListPrinter = setInterval(async () => fetchPrinterInfo(false), 15 * 60 * 1000);
+
+        return () => {
+            clearInterval(intervalListPrinter);
+        }
+
     }, []);
 
     return (
